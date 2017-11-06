@@ -1,0 +1,15 @@
+.cp_img {
+    position: relative;
+    width: 90px;
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.cp_img .cp_img_jian {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    background: red;
+}

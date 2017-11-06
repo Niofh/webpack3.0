@@ -1,13 +1,14 @@
 {
-  "name": "webpack3.0",
+  "name": "of-webpack",
   "version": "1.0.0",
-  "description": "多页面webpack配置",
+  "description": "多页面webpack3.0配置",
   "main": "webpack.config.js",
   "scripts": {
     "dev": "webpack-dev-server  --inline --hot --progress --quiet --colors --open  --config ./webpack.dev.js",
     "build": "webpack --progress --colors --config ./webpack.build.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "github":"https://github.com/Foreverofh/webpack3.0",
   "author": "oufuhua",
   "license": "ISC",
   "devDependencies": {

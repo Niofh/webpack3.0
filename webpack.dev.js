@@ -36,7 +36,7 @@ module.exports = function (env) {
         }
       }),
       // webpack-dev-server 强化插件
-      new webpack.HotModuleReplacementPlugin(),
+      // new webpack.HotModuleReplacementPlugin(),
       new webpack.NoEmitOnErrorsPlugin(),
       // 错误提示
       new FriendlyErrorsPlugin()

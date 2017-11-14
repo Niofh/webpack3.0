@@ -14,7 +14,10 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var glob = require('glob')
 
 var entries = getEntry('./src/page/**/index.js', './src/page/');
-var pages = Object.keys(getEntry('./src/page/**/*.html', './src/page/'));
+var pages = Object.keys(getEntry('./src/page/**/index.html', './src/page/'));
+
+console.log(pages)
+
 
 function resolve(url) {
   return path.resolve(__dirname, url)
@@ -91,6 +94,7 @@ var config = {
       }
     ]
   },
+
   plugins: [
     // 全局引入
     new webpack.ProvidePlugin({
@@ -115,6 +119,7 @@ var config = {
 
     //webpack3.0特点 将一些有联系的模块，放到一个闭包函数里面去，通过减少闭包函数数量从而加快JS的执行速度。
     new webpack.optimize.ModuleConcatenationPlugin(),
+
   ]
 }
 
@@ -140,7 +145,7 @@ pages.forEach(function (pathname) {
   if (pathname in config.entry) {
     conf.favicon = './src/images/favicon.ico';
     conf.inject = 'body';
-    conf.chunks = ['manifest', 'vendor', pathname];
+    conf.chunks = ['jquery', 'manifest', 'vendor', pathname];
     conf.hash = true;
   }
   config.plugins.push(new HtmlWebpackPlugin(conf));

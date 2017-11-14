@@ -4,8 +4,8 @@
   "description": "多页面webpack3.0配置",
   "main": "webpack.config.js",
   "scripts": {
-    "dev": "webpack-dev-server  --inline --hot --progress --quiet --colors --open  --config ./webpack.dev.js",
-    "build": "webpack --progress --colors --config ./webpack.build.js",
+    "dev": "webpack-dev-server  --quiet --progress --colors --open  --config ./webpack.dev.js",
+    "build": "webpack --progress --colors --display-error-details --config ./webpack.build.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "github":"https://github.com/Foreverofh/webpack3.0",

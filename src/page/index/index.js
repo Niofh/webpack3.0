@@ -4,4 +4,7 @@
 
 import "./index.styl"
 
-console.log(1111)
+import "@/js/common/common.js"
+import $ from "jquery"
+
+

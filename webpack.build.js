@@ -11,10 +11,11 @@ var CompressionWebpackPlugin = require('compression-webpack-plugin')
 
 
 var webpackConfig = function (env) {
-  return  Merge(CommonConfig, {
+  return Merge(CommonConfig, {
     output: {
       publicPath: config.build.routerBaseUrl,    // 打包路径  也是devServer服务器的相对路径
     },
+
     plugins: [
       new CleanWebpackPlugin(['dist']),  // 删除dist
       new webpack.LoaderOptionsPlugin({
@@ -40,12 +41,14 @@ var webpackConfig = function (env) {
         comments: false
       }),
 
-      new CopyWebpackPlugin([{
-        from: __dirname + '/static',
-        to: __dirname + '/dist/static',
-        ignore: ['.*'],
-        force: true, // 覆盖之前的插件
-      }]),
+      new CopyWebpackPlugin([
+        {
+          from: __dirname + '/static',
+          to: __dirname + '/dist/static',
+          ignore: ['.*'],
+          force: true, // 覆盖之前的插件
+        }
+      ]),
       // 文件gzip
       new CompressionWebpackPlugin({
         asset: '[path].gz[query]',
@@ -65,9 +68,6 @@ var webpackConfig = function (env) {
     }
   })
 }
-
-
-
 
 
 module.exports = webpackConfig

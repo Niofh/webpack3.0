@@ -25,7 +25,8 @@ module.exports = function (env) {
       port: 8081,           // 端口
       inline: true,
       hot: true,
-      quiet: true
+      quiet: true,
+      historyApiFallback: true
     },
     plugins: [
       // new DashboardPlugin(dashboard.setData),

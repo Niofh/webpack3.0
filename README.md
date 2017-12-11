@@ -34,6 +34,7 @@
 
 ### 开发启动： npm run dev   
 ### 访问: http://localhost:8081/html/index/index.html
+### 自动刷新访问: http://localhost:3000/html/index/index.html
 
 
 =========npm账号=====

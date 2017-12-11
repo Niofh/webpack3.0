@@ -6,11 +6,9 @@ const Merge = require('webpack-merge');  // 把通用配置和环境特定配置
 const CommonConfig = require('./webpack.common.js');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 var config = require('./config/index')
+var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
-// 控制台输出美化插件
-// var Dashboard = require('webpack-dashboard');
-// var DashboardPlugin = require('webpack-dashboard/plugin');
-// var dashboard = new Dashboard();
+
 
 module.exports = function (env) {
   return Merge(CommonConfig, {
@@ -35,6 +33,22 @@ module.exports = function (env) {
           'NODE_ENV': JSON.stringify('development')
         }
       }),
+
+      new BrowserSyncPlugin(
+          // BrowserSync options
+          {
+            // browse to http://localhost:3000/ during development
+            host: 'localhost',
+            port: 3000,
+            // proxy the Webpack Dev Server endpoint
+            // (which should be serving on http://localhost:3100/)
+            // through BrowserSync
+            proxy: 'http://localhost:8081/'
+          },
+          // plugin options
+
+      ),
+
       // webpack-dev-server 强化插件
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NoEmitOnErrorsPlugin(),

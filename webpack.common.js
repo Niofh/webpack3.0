@@ -29,6 +29,9 @@ var config = {
     filename: 'js/[name].[hash].js', // 文件名称
     chunkFilename: ".js/[id].[chunkhash].js"  // 按需加载的文件生成
   },
+  externals: {
+    jquery: 'window.$'  // 把jquery排除,之后引入jquery cdn减压服务器 https://www.zhihu.com/question/20227463
+  },
   resolve: {
     // 使用的扩展名
     extensions: ['.js', '.json', '.css', '.ejs'],
@@ -54,8 +57,9 @@ var config = {
             plugins: [
               'syntax-dynamic-import',    // 支持import
               'transform-async-to-generator',  // 下面都支持async
-              'transform-regenerator',
-              'transform-runtime']
+              'transform-regenerator'
+            ]// 下面都支持async // 有babel-polyfill不需要再引入'transform-runtime'
+
           }
         }]
       },

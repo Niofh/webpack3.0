@@ -5,6 +5,5 @@
 import "./index.styl"
 
 import "@/js/common/common.js"
-import $ from "jquery"
 
 

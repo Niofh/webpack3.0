@@ -50,6 +50,7 @@
   "dependencies": {
     "alertifyjs": "^1.11.0",
     "art-template": "^4.12.2",
+    "babel-polyfill": "^6.26.0",
     "bootstrap": "^3.3.7",
     "choices.js": "^3.0.2",
     "jquery": "^1.12.4",

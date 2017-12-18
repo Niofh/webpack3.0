@@ -13,8 +13,8 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var glob = require('glob')
 
-var entries = getEntry('./src/page/**/index.js', './src/page/');
-var pages = Object.keys(getEntry('./src/page/**/index.html', './src/page/'));
+var entries = getEntry('./src/page/*/index.js', './src/page/');
+var pages = Object.keys(getEntry('./src/page/*/index.html', './src/page/'));
 
 console.log(pages)
 

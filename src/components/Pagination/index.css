@@ -1,0 +1,14 @@
+.m-pagination{ margin:0}
+.m-pagination-page, .m-pagination-info, .m-pagination-size, .m-pagination-jump, .m-pagination-kuozhang{ margin-top:0}
+.m-pagination-page > li > a, .m-pagination-size > select, .m-pagination-group > input, .m-pagination-group > button, .m-pagination-info{ color:#666; font-size: 13px; }
+.m-pagination-page{ float:right}
+.m-pagination-info{ padding-left:15px; color:#717884}
+.m-pagination-info,.m-pagination-size{ padding-right:5px;}
+.m-pagination-info, .m-pagination-kuozhang{ height: 30px; line-height: 30px;}
+.m-pagination-page > li > a{ border-radius:15px; border-color:#ccc; height: 24px; line-height: 24px; margin:0 5px 6px 0; padding:0 10px}
+.m-pagination-page > li.active > a,.m-pagination-page > li.active > a:hover,.m-pagination-group > button:hover{ background-color: #00ba8b; border-color:#00ba8b; color: #fff}
+.m-pagination-page > li:first-child > a,.m-pagination-page > li:last-child > a{ border-radius:15px; }
+.m-pagination-page > li:hover > a{ background-color: #fff;  border-color: #70809e; color: #70809e}
+.m-pagination-size > select,.m-pagination-group > button{ height: 30px;}
+.m-pagination-group > input{ height: 28px; width:40px}
+.m-pagination-group > button{ padding:0 10px;}

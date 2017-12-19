@@ -1,0 +1,8 @@
+<% include('./header.art', {
+header: header
+}) %>
+
+{{if role!==-1}}
+<!--角色定义-->
+<button id="of-button">{{button}}</button>
+{{/if}}

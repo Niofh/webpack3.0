@@ -1,4 +1,6 @@
 // https://github.com/aui/art-template-loader 案列
+import "./button.styl"
+
 import buttonTemplate from "./button.art"
 
 

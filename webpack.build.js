@@ -11,62 +11,63 @@ var CompressionWebpackPlugin = require('compression-webpack-plugin')
 
 
 var webpackConfig = function (env) {
-  return Merge(CommonConfig, {
-    output: {
-      publicPath: config.build.routerBaseUrl,    // 打包路径  也是devServer服务器的相对路径
-    },
-
-    plugins: [
-      new CleanWebpackPlugin(['dist']),  // 删除dist
-      new webpack.LoaderOptionsPlugin({
-        minimize: true,
-        debug: false
-      }),
-      new webpack.DefinePlugin({
-        'process.env': {
-          'NODE_ENV': JSON.stringify('production')
-        }
-      }),
-      new webpack.optimize.UglifyJsPlugin({
-        beautify: false,
-        mangle: {
-          screw_ie8: true,
-          keep_fnames: true
+    return Merge(CommonConfig, {
+        output: {
+            publicPath: config.build.routerBaseUrl,    // 打包路径  也是devServer服务器的相对路径
         },
-        compress: {
-          screw_ie8: true,
-          drop_debugger: true,
-          drop_console: true
-        },
-        comments: false
-      }),
 
-      new CopyWebpackPlugin([
-        {
-          from: __dirname + '/static',
-          to: __dirname + '/dist/static',
-          ignore: ['.*'],
-          force: true, // 覆盖之前的插件
+        plugins: [
+            new CleanWebpackPlugin(['dist']),  // 删除dist
+            new webpack.LoaderOptionsPlugin({
+                minimize: true,
+                debug: false
+            }),
+            new webpack.DefinePlugin({
+                'process.env': {
+                    'NODE_ENV': JSON.stringify('production')
+                }
+            }),
+            new webpack.optimize.UglifyJsPlugin({
+                except: ['$super', '$', 'exports', 'require'], //排除关键字
+                beautify: false,
+                mangle: {
+                    screw_ie8: true,
+                    keep_fnames: true
+                },
+                compress: {
+                    screw_ie8: true,
+                    drop_debugger: true,
+                    drop_console: true
+                },
+                comments: false
+            }),
+
+            new CopyWebpackPlugin([
+                {
+                    from: __dirname + '/static',
+                    to: __dirname + '/dist/static',
+                    ignore: ['.*'],
+                    force: true, // 覆盖之前的插件
+                }
+            ]),
+            // 文件gzip
+            new CompressionWebpackPlugin({
+                asset: '[path].gz[query]',
+                algorithm: 'gzip',
+                test: new RegExp(
+                    '\\.(' +
+                    config.build.productionGzipExtensions.join('|') +
+                    ')$'
+                ),
+                threshold: 10240,
+                minRatio: 0.8
+            })
+        ],
+
+        performance: {
+            hints: false
         }
-      ]),
-      // 文件gzip
-      new CompressionWebpackPlugin({
-        asset: '[path].gz[query]',
-        algorithm: 'gzip',
-        test: new RegExp(
-            '\\.(' +
-            config.build.productionGzipExtensions.join('|') +
-            ')$'
-        ),
-        threshold: 10240,
-        minRatio: 0.8
-      })
-    ],
-
-    performance: {
-      hints: false
-    }
-  })
+    })
 }
 
 

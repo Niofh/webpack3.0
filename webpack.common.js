@@ -76,10 +76,6 @@ var config = {
                     fallback: "style-loader",
                     use: ["happypack/loader?id=happyStylus"]
                 })
-
-                // use: ExtractTextPlugin.extract(['css-loader',  'stylus-loader','postcss-loader'])
-               // use: ExtractTextPlugin.extract(['happypack/loader?id=happyStylus'])
-
             },
 
             {

@@ -37,11 +37,9 @@
 ### 自动刷新访问: http://localhost:3000/html/index/index.html
 
 
-=========npm账号=====
 
-foreverofh
-
-=============github==================
+#### 优化文章
+https://juejin.im/post/5a63f082f265da3e303c95cc
 
 
 

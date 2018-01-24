@@ -7,20 +7,30 @@
 
 // 参考网站 https://segmentfault.com/a/1190000009454172#articleHeader7
 
-var path = require('path')
-var webpack = require('webpack')
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
+var path = require('path');
+var webpack = require('webpack');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var glob = require('glob')
+var glob = require('glob');
+
+// 开启多线程打包
+var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+
+
+var HappyPack = require('happypack');
+var os = require('os');
+var happyThreadPool = HappyPack.ThreadPool({size: os.cpus().length});
+
+
 
 var entries = getEntry('./src/page/*/index.js', './src/page/');
 var pages = Object.keys(getEntry('./src/page/*/index.html', './src/page/'));
 
-console.log(pages)
+console.log(pages);
 
 
 function resolve(url) {
-    return path.resolve(__dirname, url)
+    return path.resolve(__dirname, url);
 }
 
 var config = {
@@ -51,27 +61,25 @@ var config = {
             {
                 test: /\.js$/,
                 exclude: /(node_modules)/,
-                loader: 'babel-loader',
-                // use: [{
-                //   loader: 'babel-loader',
-                //   options: {
-                //     presets: [['es2015', {modules: false}]],
-                //     plugins: [
-                //       'syntax-dynamic-import',    // 支持import
-                //       'transform-async-to-generator',  // 下面都支持async
-                //       'transform-regenerator'
-                //     ]// 下面都支持async // 有babel-polyfill不需要再引入'transform-runtime'
-                //
-                //   }
-                // }]
+                loader: 'happypack/loader?id=happybabel',
             },
             {
                 test: /\.css$/,
-                use: ExtractTextPlugin.extract(['css-loader', 'postcss-loader'])
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: ["happypack/loader?id=happyCss"]
+                })
             },
             {
                 test: /\.styl/,
-                use: ExtractTextPlugin.extract(['css-loader', 'postcss-loader', 'stylus-loader'])
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: ["happypack/loader?id=happyStylus"]
+                })
+
+                // use: ExtractTextPlugin.extract(['css-loader',  'stylus-loader','postcss-loader'])
+               // use: ExtractTextPlugin.extract(['happypack/loader?id=happyStylus'])
+
             },
 
             {
@@ -109,6 +117,35 @@ var config = {
     },
 
     plugins: [
+
+        // 多线程打包
+        new UglifyJSPlugin({
+            parallel: true
+        }),
+
+        new HappyPack({
+            id: 'happybabel',
+            loaders: ['babel-loader?cacheDirectory=true'],
+            threadPool: happyThreadPool,
+            verbose: true
+        }),
+
+        new HappyPack({
+            id: 'happyCss',
+            loaders: ['css-loader', 'postcss-loader'],
+            threadPool: happyThreadPool,
+            verbose: true
+        }),
+
+        new HappyPack({
+            id: 'happyStylus',
+            loaders: ['css-loader', 'postcss-loader','stylus-loader'],
+            threadPool: happyThreadPool,
+            verbose: true
+        }),
+
+
+
         // 全局引入
         new webpack.ProvidePlugin({
             $: 'jquery',
@@ -134,7 +171,7 @@ var config = {
         new webpack.optimize.ModuleConcatenationPlugin(),
 
     ]
-}
+};
 
 
 pages.forEach(function (pathname) {
@@ -188,4 +225,4 @@ function getEntry(globPath, pathDir) {
 }
 
 
-module.exports = config
+module.exports = config;

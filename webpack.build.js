@@ -17,7 +17,9 @@ var webpackConfig = function (env) {
         },
 
         plugins: [
+
             new CleanWebpackPlugin(['dist']),  // 删除dist
+
             new webpack.LoaderOptionsPlugin({
                 minimize: true,
                 debug: false

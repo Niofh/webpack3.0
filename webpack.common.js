@@ -9,12 +9,10 @@
 
 var path = require('path');
 var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var glob = require('glob');
 
-// 开启多线程打包
-var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 
 var HappyPack = require('happypack');
@@ -22,11 +20,17 @@ var os = require('os');
 var happyThreadPool = HappyPack.ThreadPool({size: os.cpus().length});
 
 
+var devWebpack = require("./webpack-entries-dev");
 
-var entries = getEntry('./src/page/*/index.js', './src/page/');
-var pages = Object.keys(getEntry('./src/page/*/index.html', './src/page/'));
+var entries = devWebpack.entries;
+var pages = devWebpack.pages;
 
-console.log(pages);
+// 生产环境打开它
+// var entries = getEntry('./src/page/**/index.js', './src/page/');
+// var pages = Object.keys(getEntry('./src/**/index.html', './src/page/'));
+
+console.log(entries)
+console.log(pages)
 
 
 function resolve(url) {
@@ -41,7 +45,8 @@ var config = {
         chunkFilename: ".js/[id].[chunkhash].js"  // 按需加载的文件生成
     },
     externals: {
-        jquery: 'window.$'  // 把jquery排除,之后引入jquery cdn减压服务器 https://www.zhihu.com/question/20227463
+        jquery: 'window.$',  // 把jquery排除,之后引入jquery cdn减压服务器 https://www.zhihu.com/question/20227463
+        mui: "mui"
     },
     resolve: {
         // 使用的扩展名
@@ -49,39 +54,21 @@ var config = {
         // 模块别名列表
         alias: {
             '@': path.join(__dirname, '/src'),
+            "config":path.join(__dirname, '/config'),
             "static": path.join(__dirname, '/static')
         }
     },
     module: {
         rules: [
             {
-                test: /\.ejs/,
-                loader: 'ejs-loader'
-            },
-            {
                 test: /\.js$/,
-                exclude: /(node_modules)/,
+                exclude: [
+                    path.resolve(__dirname, "node_modules"),
+                    path.resolve(__dirname, "src/no-babel"),
+                ],
                 loader: 'happypack/loader?id=happybabel',
             },
-            {
-                test: /\.css$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: "style-loader",
-                    use: ["happypack/loader?id=happyCss"]
-                })
-            },
-            {
-                test: /\.styl/,
-                use: ExtractTextPlugin.extract({
-                    fallback: "style-loader",
-                    use: ["happypack/loader?id=happyStylus"]
-                })
-            },
 
-            {
-                test: /\.art$/,
-                loader: "art-template-loader"
-            },
 
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -95,6 +82,14 @@ var config = {
                             }
                         }
                     ]
+            },
+            {
+                test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
+                loader: 'url-loader',
+                options: {
+                    limit: 10000,
+                    name: 'media/[name].[hash:7].[ext]'
+                }
             },
             {
                 test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
@@ -113,33 +108,13 @@ var config = {
     },
 
     plugins: [
-
         // 多线程打包
-        new UglifyJSPlugin({
-            parallel: true
-        }),
-
         new HappyPack({
             id: 'happybabel',
             loaders: ['babel-loader?cacheDirectory=true'],
             threadPool: happyThreadPool,
             verbose: true
         }),
-
-        new HappyPack({
-            id: 'happyCss',
-            loaders: ['css-loader', 'postcss-loader'],
-            threadPool: happyThreadPool,
-            verbose: true
-        }),
-
-        new HappyPack({
-            id: 'happyStylus',
-            loaders: ['css-loader', 'postcss-loader','stylus-loader'],
-            threadPool: happyThreadPool,
-            verbose: true
-        }),
-
 
 
         // 全局引入
@@ -149,22 +124,6 @@ var config = {
             "window.jQuery": "jquery"
         }),
 
-        // 公共部分js抽出来
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            minChunks: function (module) {
-                return module.context && module.context.indexOf('node_modules') !== -1;
-            }
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'manifest'
-        }),
-
-        // 抽离css
-        new ExtractTextPlugin('css/[name].[hash].css'),
-
-        //webpack3.0特点 将一些有联系的模块，放到一个闭包函数里面去，通过减少闭包函数数量从而加快JS的执行速度。
-        new webpack.optimize.ModuleConcatenationPlugin(),
 
     ]
 };
@@ -182,7 +141,7 @@ pages.forEach(function (pathname) {
          * 为避免压缩html，需要在html-loader上配置'html?-minimize'，见loaders中html-loader的配置。
          */
         title: '',
-        //minify: false
+        //minify:false
         minify: { //压缩HTML文件
             removeComments: true, //移除HTML中的注释
             collapseWhitespace: false //删除空白符与换行符
